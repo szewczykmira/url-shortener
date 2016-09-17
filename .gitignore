@@ -1,0 +1,6 @@
+urlenv/
+*.pyc
+__pycache__/
+*.swp
+
+.idea/
