@@ -1,11 +1,42 @@
 # -*- coding: utf-8 -*-
 
-from django.core.management import BaseCommand, CommandError
+from django.core.management import BaseCommand
 from django.contrib.auth import get_user_model
+
+import urllib2
+import json
+
+User = get_user_model()
 
 
 class Command(BaseCommand):
     help = "Fetch fake users to database"
 
+    def add_arguments(self, parser):
+        parser.add_argument('people', nargs='+', type=int)
+
     def handle(self, *args, **options):
-        self.stdout.write("Test")
+        people_number = options['people'][0]
+        data = self.extract_data(people_number)
+        for elem in data['results']:
+            self.create_user(elem)
+
+        self.stdout.write(self.style.SUCCESS("Fake users added!"))
+
+    def extract_data(self, people):
+        url = "http://api.randomuser.me/?results={result}" \
+              "&exc=nat,picture,id,cell,phone,dob,location,gender".format(
+            result=people)
+        response = urllib2.urlopen(url)
+        return json.load(response)
+
+    def create_user(self, item):
+        obj = {
+            'first_name': item['name']['first'],
+            'last_name': item['name']['last'],
+            'username': item['login']['username'],
+            'email': item['email'],
+            'password': item['login']['password'],
+            'date_joined': item['registered']
+        }
+        User.objects.create_user(**obj)
