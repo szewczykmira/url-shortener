@@ -4,4 +4,4 @@ from django.apps import AppConfig
 
 
 class UrlShortenerConfig(AppConfig):
-    name = 'url_shortener'
+    name = 'apps.url_shortener'
