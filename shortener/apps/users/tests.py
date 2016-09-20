@@ -5,6 +5,8 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils.six import StringIO
 
+from .utils import get_random_user
+
 User = get_user_model()
 
 
@@ -42,3 +44,11 @@ class CreateFakeUsersTest(TestCase):
         people = 12
         call_command('create_fake_users', people, stdout=self.out)
         self.assertEqual(count + people, User.objects.all().count())
+
+    def test_random_users_no_users(self):
+        self.assertFalse(get_random_user())
+
+    def test_get_random_users(self):
+        call_command('create_fake_users', 12, stdout=self.out)
+        random_user = get_random_user()
+        self.assertTrue(isinstance(random_user, User))
