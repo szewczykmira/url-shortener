@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Define max length of shortened link
+SHORT_URL_MAX_LEN = 50
+
 
 # Application definition
 
