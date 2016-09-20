@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.test import TestCase
 
-from models import ShortURL
+from .models import ShortURL
+from .utils import get_random_string
 from users.utils import get_random_user
 
 
@@ -61,3 +63,8 @@ class ShortenerTest(TestCase):
 
         self.assertFalse(has_error)
         self.assertEqual(count + 1, ShortURL.objects.all().count())
+
+    def test_get_random_string(self):
+        random_string = get_random_string()
+        self.assertTrue(len(random_string) <= settings.SHORT_URL_MAX_LEN)
+        self.assertTrue(random_string)
