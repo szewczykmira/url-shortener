@@ -32,7 +32,7 @@ class ShortenerTest(TestCase):
         count = ShortURL.objects.all().count()
         has_error = False
         try:
-            obj = ShortURL(short_url="foo", original_url="bar")
+            obj = ShortURL(short_url="foo", original_url="http://www.bar.com")
             obj.save()
         except ValidationError:
             has_error = True
@@ -44,9 +44,20 @@ class ShortenerTest(TestCase):
         count = ShortURL.objects.all().count()
         has_error = False
         try:
-            obj = ShortURL(original_url="foo", user=user)
+            obj = ShortURL(original_url="http://www.foo.com", user=user)
             obj.save()
         except ValidationError:
             has_error = True
         self.assertTrue(has_error)
         self.assertEqual(count, ShortURL.objects.all().count())
+
+    def test_model_add(self):
+        user = get_random_user()
+        count = ShortURL.objects.all().count()
+        has_error = False
+        obj = ShortURL(original_url="http://foo.com",
+                       short_url="bar", user=user)
+        obj.save()
+
+        self.assertFalse(has_error)
+        self.assertEqual(count + 1, ShortURL.objects.all().count())

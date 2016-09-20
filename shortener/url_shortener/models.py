@@ -11,9 +11,8 @@ User = settings.AUTH_USER_MODEL
 
 @python_2_unicode_compatible
 class ShortURL(models.Model):
-    # TODO: make sure it accepts only not blank elements!
     original_url = models.URLField(verbose_name=_("Original url"),
-                                   unique=True)
+                                   unique=True, help_text='http://example.com')
     short_url = models.TextField(verbose_name=_("Short url"), unique=True)
     user = models.ForeignKey(User, verbose_name=_("Submitter"))
 
