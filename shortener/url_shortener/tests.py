@@ -5,6 +5,7 @@ from django.conf import settings
 from django.test import TestCase
 
 from .models import ShortURL
+from .forms import ShortURLForm
 from .utils import get_random_string
 from users.utils import get_random_user
 
@@ -22,37 +23,26 @@ class ShortenerTest(TestCase):
     def test_model_must_have_origin_url(self):
         user = get_random_user()
         count = ShortURL.objects.all().count()
-        has_error = False
-        try:
+        with self.assertRaises(ValidationError):
             obj = ShortURL(user=user, short_url="foo")
             obj.save()
-        except ValidationError:
-            has_error = True
 
-        self.assertTrue(has_error)
         self.assertEqual(count, ShortURL.objects.all().count())
 
     def test_model_must_have_user(self):
         count = ShortURL.objects.all().count()
-        has_error = False
-        try:
+        with self.assertRaises(ValidationError):
             obj = ShortURL(short_url="foo", original_url="http://www.bar.com")
             obj.save()
-        except ValidationError:
-            has_error = True
-        self.assertTrue(has_error)
         self.assertEqual(count, ShortURL.objects.all().count())
 
     def test_model_must_have_short_url(self):
         count = ShortURL.objects.all().count()
-        has_error = False
-        try:
+        with self.assertRaises(ValidationError):
             obj = ShortURL(original_url="http://www.foo.com",
                            user=get_random_user())
             obj.save()
-        except ValidationError:
-            has_error = True
-        self.assertTrue(has_error)
+
         self.assertEqual(count, ShortURL.objects.all().count())
 
     def test_model_add(self):
@@ -93,3 +83,6 @@ class ShortenerTest(TestCase):
             obj.set_short_url()
         obj.save()
         self.assertNotEqual(base64_str, obj.short_url)
+
+    def test_short_url_form_init(self):
+        pass
