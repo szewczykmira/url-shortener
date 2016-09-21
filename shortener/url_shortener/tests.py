@@ -84,5 +84,17 @@ class ShortenerTest(TestCase):
         obj.save()
         self.assertNotEqual(base64_str, obj.short_url)
 
-    def test_short_url_form_init(self):
-        pass
+    def test_short_url_form_valid_data(self):
+        form = ShortURLForm({'original_url': 'http://google.com'})
+        self.assertTrue(form.is_valid())
+        obj = form.save()
+        self.assertEqual(obj.original_url, 'http://google.com')
+
+    def test_short_url_form_no_data(self):
+        form = ShortURLForm()
+        self.assertFalse(form.is_valid())
+
+    def test_short_url_form_not_valid(self):
+        form = ShortURLForm({'original_url': 'foo'})
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {'original_url': [u"Enter a valid URL."]})
