@@ -5,7 +5,9 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
+from .utils import get_random_string
 
+import base64
 
 User = settings.AUTH_USER_MODEL
 
@@ -22,6 +24,15 @@ class ShortURL(models.Model):
 
     def __str__(self):
         return self.original_url
+
+    def set_short_url(self):
+        alls = ShortURL.objects.all().values_list('short_url')
+        short_str = base64.urlsafe_b64encode(self.original_url)
+        if short_str in alls or len(short_str) > settings.SHORT_URL_MAX_LEN:
+            short_str = get_random_string()
+            while short_str in alls:
+                short_str = get_random_string()
+        self.short_url = short_str
 
     def save(self, *args, **kwargs):
         self.full_clean()
