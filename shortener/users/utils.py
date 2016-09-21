@@ -12,6 +12,6 @@ def get_random_user():
     """
     count = User.objects.all().count()
     if not count:
-        return False
+        raise User.DoesNotExist
     random = randint(0, count - 1)
     return User.objects.all()[random]

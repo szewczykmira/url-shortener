@@ -46,7 +46,8 @@ class CreateFakeUsersTest(TestCase):
         self.assertEqual(count + people, User.objects.all().count())
 
     def test_random_users_no_users(self):
-        self.assertFalse(get_random_user())
+        with self.assertRaises(User.DoesNotExist):
+            get_random_user()
 
     def test_get_random_users(self):
         call_command('create_fake_users', 12, stdout=self.out)
