@@ -13,6 +13,7 @@
                     <label>{% trans "Enter long url to make it simpler" %}</label>
                     {{ field }}
                     <span class="text-muted">{{ field.help_text }}</span>
+                    <br />
                     {% if field.errors %}
                     <span class="text-danger">{{ field.errors|first }}</span>
                     {% endif %}

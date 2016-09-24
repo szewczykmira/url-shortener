@@ -11,8 +11,8 @@ from .models import ShortURL
 def home(request):
     ctx = {'form': ShortURLForm(request.POST or None)}
     if request.method == 'POST':
-        origin_url = request.POST.get('origin_url', False)
-        contains_url = ShortURL.objects.filter(original_url=origin_url)
+        original_url = request.POST.get('original_url', False)
+        contains_url = ShortURL.objects.filter(original_url=original_url)
         if contains_url.exists():
             messages.info(request, _("URL already was in our database!"))
             return redirect(reverse('display_info', kwargs={
