@@ -17,6 +17,18 @@
         <a class="navbar-brand" href="{% url 'home' %}">Short it!</a>
     </nav>
     <!-- END TOP BAR -->
+
+    <!-- MESSAGES -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <!-- END MESSAGES -->
+
+    <!-- CONTENT -->
     <div class="container">
         {% block content %}
         {% endblock %}
