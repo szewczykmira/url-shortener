@@ -15,7 +15,9 @@ User = settings.AUTH_USER_MODEL
 @python_2_unicode_compatible
 class ShortURL(models.Model):
     original_url = models.URLField(verbose_name=_("Original url"),
-                                   unique=True, help_text='http://example.com')
+                                   unique=True,
+                                   help_text=_('Input should look like this:'
+                                               ' http://example.com'))
     short_url = models.TextField(verbose_name=_("Short url"), unique=True)
     user = models.ForeignKey(User, verbose_name=_("Submitter"))
 

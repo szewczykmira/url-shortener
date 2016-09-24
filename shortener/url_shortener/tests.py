@@ -106,3 +106,15 @@ class ShortenerTest(TestCase):
                        short_url="bar", user=get_random_user())
         obj.save()
         count = ShortURL.objects.all()
+
+    def test_follow_link(self):
+        response = self.client.get(reverse('follow_link',
+                                           kwargs={'short_url': 'foo'}))
+        self.assertRedirects(response, '/')
+        obj = ShortURL(original_url="http://foo.com",
+                       short_url="bar", user=get_random_user())
+        obj.save()
+        response_true = self.client.get(
+            reverse('follow_link', kwargs={'short_url': 'bar'}))
+        self.assertRedirects(response_true, 'http://foo.com',
+                            target_status_code=302)

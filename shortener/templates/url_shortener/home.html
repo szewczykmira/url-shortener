@@ -12,10 +12,19 @@
                 <div class="form-group">
                     <label>{% trans "Enter long url to make it simpler" %}</label>
                     {{ field }}
+                    <span class="text-muted">{{ field.help_text }}</span>
+                    {% if field.errors %}
+                    <span class="text-danger">{{ field.errors|first }}</span>
+                    {% endif %}
                 </div>
             </div>
         </div>
     {% endfor %}
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-success pull-left">{% trans "Short it" %}</button>
+            </div>
+        </div>
     </form>
 {% endblock %}
 
