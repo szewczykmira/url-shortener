@@ -21,6 +21,8 @@ def home(request):
         if ctx['form'].is_valid():
             try:
                 obj = ctx['form'].save()
+                return redirect(reverse('display_info',
+                                        kwargs={'short_url': obj.short_url}))
             except ObjectDoesNotExist:
                 messages.error(request, _("An error occured"))
 
