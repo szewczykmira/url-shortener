@@ -15,11 +15,6 @@ import base64
 class ShortenerTest(TestCase):
     fixtures = ['users.json']
 
-    def test_view_home(self):
-        response = self.client.get(reverse('home'), follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'url_shortener/home.html')
-
     def test_model_must_have_origin_url(self):
         user = get_random_user()
         count = ShortURL.objects.all().count()
@@ -98,3 +93,16 @@ class ShortenerTest(TestCase):
         form = ShortURLForm({'original_url': 'foo'})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {'original_url': [u"Enter a valid URL."]})
+
+    def test_view_home_get(self):
+        response = self.client.get(reverse('home'), follow=True)
+        context = response.context[-1]
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(isinstance(context['form'], ShortURLForm))
+        self.assertTemplateUsed(response, 'url_shortener/home.html')
+
+    def test_view_home_post(self):
+        obj = ShortURL(original_url="http://foo.com",
+                       short_url="bar", user=get_random_user())
+        obj.save()
+        count = ShortURL.objects.all()

@@ -1,5 +1,28 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block content %}
-    <h3 class="display-4 text-info">Welcome!</h3>
+    <h2 class="h2 text-xs-center">{% trans "Simplify your link!" %}</h2>
+    <form method="POST" actio="">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="row">
+            <div class="col-xl-6 col-lm-6 col-md-8 col-xs-12">
+                <div class="form-group">
+                    <label>{% trans "Enter long url to make it simpler" %}</label>
+                    {{ field }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    </form>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+           $('input').addClass('form-control');
+        });
+    </script>
 {% endblock %}
