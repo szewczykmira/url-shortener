@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect, reverse
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render
 from .forms import ShortURLForm
@@ -15,7 +15,9 @@ def home(request):
         contains_url = ShortURL.objects.filter(original_url=origin_url)
         if contains_url.exists():
             messages.info(request, _("URL already was in our database!"))
-            # TODO redirect
+            return redirect(reverse('display_info', kwargs={
+                'short_url': contains_url.first().short_url
+            }))
         if ctx['form'].is_valid():
             try:
                 obj = ctx['form'].save()
@@ -34,5 +36,17 @@ def follow_link(request, short_url):
         obj = ShortURL.objects.get(short_url=short_url)
         return redirect(obj.original_url)
     except ObjectDoesNotExist:
-        messages.error(request, _("There is not the link you are looking for"))
+        messages.error(request, _("Link does not exists"))
         return redirect('home')
+
+
+def display_info(request, short_url):
+    try:
+        ctx = {
+            'object': ShortURL.objects.select_related('user').get(
+                short_url=short_url)
+        }
+    except ObjectDoesNotExist:
+        messages.error(request, _("Link does not exists"))
+        return redirect('home')
+    return render(request, 'url_shortener/display_info.html', ctx)

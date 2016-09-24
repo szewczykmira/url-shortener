@@ -118,3 +118,29 @@ class ShortenerTest(TestCase):
             reverse('follow_link', kwargs={'short_url': 'bar'}))
         self.assertRedirects(response_true, 'http://foo.com',
                             target_status_code=302)
+
+    def test_display_info_not_exists(self):
+        response = self.client.get(reverse('display_info',
+                                           kwargs={'short_url': 'foo'}))
+        self.assertRedirects(response, '/')
+
+    def test_display_info_exists(self):
+        obj = ShortURL(original_url="http://foo.com",
+                       short_url="bar", user=get_random_user())
+        obj.save()
+        response = self.client.get(
+            reverse('display_info', kwargs={'short_url': 'bar'}), follow=True)
+        context = response.context[-1]
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(isinstance(context['object'], ShortURL))
+        self.assertTemplateUsed(response, 'url_shortener/display_info.html')
+
+    def test_home_use_existing_url(self):
+        obj = ShortURL(original_url="http://foo.com",
+                       short_url="bar", user=get_random_user())
+        obj.save()
+        response = self.client.post(reverse('home'),
+                                    {'original_url': 'http:foo.com'},
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, '/!bar', status_code=200)
