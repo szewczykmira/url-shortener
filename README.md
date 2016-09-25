@@ -7,6 +7,7 @@
 ## Installation quide
 1. Install dependencies **pip install -r requirements.txt**
 2. Set **secret_key** `export SECRET_KEY="12345"`
-3. Copy file _settings/example_init.py_ to _settings/__init__.py_
-4. Prepare database `python manage.py migrate`
-5. Run server `python manage.py runserver`
+3. Copy file **settings/example_init.py** to **settings/__init__.py**
+4. Define database creditentials in **settings/__init__.py**
+5. Prepare database `python manage.py migrate`
+6. Run server `python manage.py runserver`

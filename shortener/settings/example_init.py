@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 from .settings import *
-# SECURITY WARNING: keep the secret key used in production secret!
-# create secret key and put it as SECRET_KEY instead of this empty string
-# You can use http://www.miniwebtool.com/django-secret-key-generator/
-SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -16,7 +12,7 @@ ALLOWED_HOSTS = []
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '',
+        'NAME': 'shortener',
         'user': '',
         'password': '',
         'host': '127.0.0.1',
