@@ -135,7 +135,7 @@ class ShortenerTest(TestCase):
         self.assertTrue(isinstance(context['object'], ShortURL))
         self.assertTemplateUsed(response, 'url_shortener/display_info.html')
 
-    def test_home_use_existing_url(self):
+    def home_use_existing_url(self):
         obj = ShortURL(original_url="http://foo.com",
                        short_url="bar", user=get_random_user())
         obj.save()
@@ -144,3 +144,9 @@ class ShortenerTest(TestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertRedirects(response, '/!bar', status_code=200)
+
+    def test_home_create_url(self):
+        reponse = self.client.post(reverse('home'),
+                                   {'orignal_url': 'http://google.com'},
+                                   follow=True)
+        self.assertEqual(reponse.status_code, 200)

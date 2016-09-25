@@ -9,6 +9,9 @@ from .models import ShortURL
 
 
 def home(request):
+    """
+    Homepage of app. Contains form for shortening links.
+    """
     ctx = {'form': ShortURLForm(request.POST or None)}
     if request.method == 'POST':
         original_url = request.POST.get('original_url', False)
@@ -21,6 +24,7 @@ def home(request):
         if ctx['form'].is_valid():
             try:
                 obj = ctx['form'].save()
+                messages.success(request, _("Short link created!"))
                 return redirect(reverse('display_info',
                                         kwargs={'short_url': obj.short_url}))
             except ObjectDoesNotExist:
@@ -43,6 +47,10 @@ def follow_link(request, short_url):
 
 
 def display_info(request, short_url):
+    """
+    Displaying information about link. If it doesn't exists then
+    returns to homepage
+    """
     try:
         ctx = {
             'object': ShortURL.objects.select_related('user').get(
