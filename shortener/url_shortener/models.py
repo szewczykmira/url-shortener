@@ -37,5 +37,6 @@ class ShortURL(models.Model):
         self.short_url = short_str
 
     def save(self, *args, **kwargs):
+        # full_clean for validation from shell
         self.full_clean()
         super(ShortURL, self).save(*args, **kwargs)

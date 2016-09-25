@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.contrib import messages
 from django.shortcuts import redirect, reverse
 from django.utils.translation import ugettext_lazy as _
@@ -27,8 +27,8 @@ def home(request):
                 messages.success(request, _("Short link created!"))
                 return redirect(reverse('display_info',
                                         kwargs={'short_url': obj.short_url}))
-            except ObjectDoesNotExist:
-                messages.error(request, _("An error occured"))
+            except ObjectDoesNotExist, ValidationError:
+                messages.error(request, _("An error occured. Please try again"))
 
     return render(request, "url_shortener/home.html", ctx)
 
