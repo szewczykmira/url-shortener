@@ -11,11 +11,7 @@ ALLOWED_HOSTS = []
 # Please fill in name, user and password for database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.sqlite3',
         'NAME': 'shortener',
-        'user': '',
-        'password': '',
-        'host': '127.0.0.1',
-        'port': '5432',
     }
 }
