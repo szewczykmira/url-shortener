@@ -11,7 +11,7 @@ ALLOWED_HOSTS = []
 # Please fill in name, user and password for database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.sqlite3',
-        'NAME': 'shortener',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
