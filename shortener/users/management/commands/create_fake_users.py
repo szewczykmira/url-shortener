@@ -18,8 +18,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         people_number = options['people'][0]
         data = self.extract_data(people_number)
-        for elem in data['results']:
-            self.create_user(elem)
+        self.create_users(data['results'])
 
         self.stdout.write(self.style.SUCCESS("Fake users added!"))
 
@@ -39,4 +38,7 @@ class Command(BaseCommand):
             'password': item['login']['password'],
             'date_joined': item['registered']
         }
-        User.objects.create_user(**obj)
+        return User(**obj)
+
+    def create_users(self, items):
+        User.objects.bulk_create([self.create_user(elem) for elem in items])
