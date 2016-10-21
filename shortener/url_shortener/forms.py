@@ -16,6 +16,9 @@ class ShortURLForm(forms.ModelForm):
         model = ShortURL
         fields = ['original_url']
 
+    def clean_original_url(self):
+        return self.cleaned_data['original_url'].lower()
+
     def save(self, *args, **kwargs):
         obj = super(ShortURLForm, self).save(commit=False)
         obj.user = get_random_user()

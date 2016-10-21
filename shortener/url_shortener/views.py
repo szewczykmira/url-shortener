@@ -23,11 +23,13 @@ def home(request):
             }))
         if ctx['form'].is_valid():
             try:
-                obj = ctx['form'].save()
+                obj = ctx['form'].save(commit=False)
+                obj.original_url = original_url
+                obj.save()
                 messages.success(request, _("Short link created!"))
                 return redirect(reverse('display_info',
                                         kwargs={'short_url': obj.short_url}))
-            except ObjectDoesNotExist, ValidationError:
+            except (ObjectDoesNotExist, ValidationError):
                 messages.error(request, _("An error occured. Please try again"))
 
     return render(request, "url_shortener/home.html", ctx)

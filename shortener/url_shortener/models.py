@@ -28,11 +28,13 @@ class ShortURL(models.Model):
         return self.original_url
 
     def set_short_url(self):
-        alls = ShortURL.objects.all().values_list('short_url')
         short_str = base64.urlsafe_b64encode(self.original_url)
-        if short_str in alls or len(short_str) > settings.SHORT_URL_MAX_LEN:
+        if ShortURL.objects.exclude(pk=self.pk).filter(
+                short_url=short_str).exists() \
+                or len(short_str) > settings.SHORT_URL_MAX_LEN:
             short_str = get_random_string()
-            while short_str in alls:
+            while ShortURL.objects.exclude(pk=self.pk).filter(
+                    short_url=short_str).exists():
                 short_str = get_random_string()
         self.short_url = short_str
 
