@@ -13,10 +13,10 @@ class Command(BaseCommand):
     help = "Fetch fake users to database"
 
     def add_arguments(self, parser):
-        parser.add_argument('people', nargs='+', type=int)
+        parser.add_argument('people', type=int)
 
     def handle(self, *args, **options):
-        people_number = options['people'][0]
+        people_number = options['people']
         data = self.extract_data(people_number)
         self.create_users(data['results'])
 
